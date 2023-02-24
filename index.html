@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Realidad aumentada basada en geolocalización</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/build/ar.js"></script>
+    <script src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <a-scene gps-camera-debug>
+      <a-entity gps-entity-place="latitude: 37.4219999; longitude: -122.0840575;">
+        <a-entity gltf-model="url(stranger_star.glb)"></a-entity>
+      </a-entity>
+    </a-scene>
+    <script>
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        document.querySelector('a-scene').setAttribute('gps-camera', 'latitude: ' + latitude + '; longitude: ' + longitude + ';');
+      });
+    </script>
+  </body>
+</html>
