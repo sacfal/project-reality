@@ -15,6 +15,7 @@
         geometry="primitive: plane"
         material="opacity: 0"
         position="0 0 -1"
+        arjs-anchor="preset: custom;"
       ></a-entity>
       <a-entity
         gltf-model="stranger_star.glb"
@@ -24,16 +25,22 @@
       <a-entity camera></a-entity>
     </a-scene>
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        var marker = document.getElementById('marker');
-        var model = document.querySelector('a-entity[gltf-model]');
-        var initialScale = model.getAttribute('scale');
-
-        var scene = document.querySelector('a-scene');
-        scene.addEventListener('mousedown', function (event) {
-          marker.setAttribute('position', event.detail.intersection.point);
-          model.setAttribute('position', marker.getAttribute('position'));
-          model.setAttribute('scale', initialScale);
+      // Esperar a que se cargue la escena
+      document.addEventListener("DOMContentLoaded", function () {
+        // Obtener referencias a los elementos relevantes
+        var marker = document.getElementById("marker");
+        var camera = document.querySelector("a-entity[camera]");
+    
+        // Agregar un controlador de eventos touchstart a la escena
+        var scene = document.querySelector("a-scene");
+        scene.addEventListener("touchstart", function (e) {
+          // Obtener la posición de intersección entre el rayo de la cámara y la superficie del mundo real
+          var intersection = camera.components.raycaster.intersectWithWorld(e.detail.touches[0].clientX, e.detail.touches[0].clientY);
+    
+          // Si se encontró una intersección, actualizar la posición del marcador
+          if (intersection) {
+            marker.setAttribute("position", intersection.x + " " + intersection.y + " " + intersection.z);
+          }
         });
       });
     </script>
